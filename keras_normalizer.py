@@ -64,7 +64,7 @@ import shutil
 import random
 import subprocess
 
-debug = True 
+debug = False 
 
 competition = ''
 home_dir = '/home/ubuntu'
@@ -130,12 +130,14 @@ def split_for_sample(training_class):
 	
 def validate():
 	arg_len = len(sys.argv)
-	if arg_len is < 2 or arg_len is not 4:
+	if arg_len < 2:
 		sys.exit('error. incorrect usage. See documentation.')
+	if arg_len > 2 and arg_len is not 4: 
+		sys.exit('error . incorrect usage')
 	if arg_len is 4: 
 		validation_percentage = sys.argv[3]
-		if validation_percentage is < 0 or validation_percentage > 1:
-			sys.exit('error. incorrect usage. See documentation.')
+		if validation_percentage < 0 or validation_percentage > 1:
+			sys.exit('incorrect validation percentage. See documentation.')
 
 
 def init_tmp():
