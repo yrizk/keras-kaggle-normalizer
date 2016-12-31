@@ -68,8 +68,8 @@ debug = False
 
 competition = ''
 home_dir = '/home/ubuntu'
-tmp_dir = os.path.join(home_dir,'tmp')
-data_dir = os.path.join(home_dir,'nbs/data')
+tmp_dir = ''
+data_dir = ''
 
 training_dir = ''
 validation_dir = ''
@@ -77,7 +77,7 @@ sample_dir = ''
 validation_percentage = 0.2
 
 def main():
-	validate()
+	validate_and_init()
 	init_tmp()
 	get_comp(sys.argv[1])
 	clean_tmp()	
@@ -128,17 +128,25 @@ def split_for_sample(training_class):
 		shutil.move(f,os.path.join(sample_dir,training_class))
 		files_taken += 1
 	
-def validate():
+def validate_and_init():
 	arg_len = len(sys.argv)
 	if arg_len < 2:
 		sys.exit('error. incorrect usage. See documentation.')
-	if arg_len > 2 and arg_len is not 4: 
-		sys.exit('error . incorrect usage')
-	if arg_len is 4: 
+	if '-valid' in sys.argv:
+		if arg_len < 4:
+			sys.exit('error. custom validation desired but not specified. See documentation.') 
+		if not is_float(sys.argv[3]):
+			sys.exit('a floating point number [0,1] only.')
 		validation_percentage = sys.argv[3]
 		if validation_percentage < 0 or validation_percentage > 1:
 			sys.exit('incorrect validation percentage. See documentation.')
-
+	if '--debug' in sys.argv:
+		global debug, home_dir
+		debug = True
+		home_dir = '/Users/rizk/code/fastai/'
+	global data_dir, tmp_dir
+	tmp_dir = os.path.join(home_dir,'tmp')
+	data_dir = os.path.join(home_dir,'nbs/data')
 
 def init_tmp():
 	mkdir(tmp_dir)
@@ -176,6 +184,13 @@ def get_comp(comp_uri):
 	os.system('unzip -q test.zip')
 	os.remove('train.zip')
 	os.remove('test.zip')
+
+def is_float(n):
+	try:
+		float(n)
+		return True
+	except ValueError:
+		return False
 
 if __name__ == '__main__':
 	main()
