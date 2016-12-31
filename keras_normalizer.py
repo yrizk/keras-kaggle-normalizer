@@ -119,13 +119,20 @@ def split_for_validation(training_class):
 
 def split_for_sample(training_class):
 	os.chdir(os.path.join(training_dir,training_class))
-	mkdir(os.path.join(sample_dir,training_class))
+	sample_train_dir = os.path.join(sample_dir + '/train',training_class)
+	sample_valid_dir = os.path.join(sample_dir + '/valid', training_class)
+	mkdir(sample_train_dir)
+	mkdir(sample_valid_dir)
 	files_taken = 0
 	training_files = os.listdir('.')
 	for f in training_files:
 		if files_taken > 99: 
 			break
-		shutil.move(f,os.path.join(sample_dir,training_class))
+		rand = random.random()
+		if rand <= validation_percentage:
+			shutil.move(f,sample_valid_dir)
+		else: 
+			shutil.move(f,sample_train_dir)
 		files_taken += 1
 	
 def validate_and_init():
