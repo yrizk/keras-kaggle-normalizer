@@ -1,7 +1,7 @@
 # keras-kaggle-normalizer
 
 Usage:
-python get_data.py competition-sub-path [-valid 0.3]
+python keras_normalizer.py competition-sub-path [-valid 0.3]
 
 Downloads data from kaggle. Normalizes data into keras compliant while adding validation and sampling directories
 
